@@ -199,7 +199,13 @@ class PagewiseState<T> extends State<Pagewise<T>> {
     this._effectiveController!.init();
 
     this._controllerListener = () {
-      setState(() {});
+      if (!mounted) return;
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
     };
 
     this._effectiveController!.addListener(this._controllerListener);
